@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "756878413698",
+    "project_id": "kotlin-d7063",
+    "storage_bucket": "kotlin-d7063.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:756878413698:android:86e88f3fe7efee5322c99b",
+        "android_client_info": {
+          "package_name": "com.example.tasklist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoRMRuHTgUQ4LIornsmtVTJwPjV1zoUHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
