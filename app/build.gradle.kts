@@ -43,6 +43,8 @@ android {
 dependencies {
 
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.firebase.common.ktx)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.navigation.compose)

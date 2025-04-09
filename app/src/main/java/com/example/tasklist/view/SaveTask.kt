@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.tasklist.components.CustomButton
+import com.example.tasklist.model.TaskModel
+import com.example.tasklist.repository.TaskRepository
 import com.example.tasklist.ui.theme.GreenRadioButtonDisabled
 import com.example.tasklist.ui.theme.GreenRadioButtonSelected
 import com.example.tasklist.ui.theme.PurpleGrey40
@@ -38,6 +40,10 @@ import com.example.tasklist.ui.theme.RedRadioButtonDisabled
 import com.example.tasklist.ui.theme.RedRadioButtonSelected
 import com.example.tasklist.ui.theme.YellowRadioButtonDisabled
 import com.example.tasklist.ui.theme.YellowRadioButtonSelected
+import com.google.api.Context
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -155,5 +161,14 @@ fun SaveTask(navController: NavController) {
                 label = "Salvar"
             )
         }
+    }
+}
+
+fun onClickSaveButton(scope: CoroutineScope, context: Context, taskModel: TaskModel) {
+    val taskRepository = TaskRepository()
+    val isValid = true;
+
+    scope.launch(Dispatchers.IO) {
+        isValid = taskModel.title.isNotEmpty() && taskModel.description.isNotEmpty()
     }
 }
