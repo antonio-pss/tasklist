@@ -29,10 +29,10 @@ import com.example.tasklist.model.TaskModel
 @Composable
 fun TaskList(navController: NavController) {
     val myTaskList: MutableList<TaskModel> = mutableListOf(
-        TaskModel("Frango", "...", 3),
-        TaskModel("Arroz", "...", 3),
-        TaskModel("Feijão", "...", 1),
-        TaskModel("Brócolis", "...", 2),
+        TaskModel(null, "Frango", "...", 3),
+        TaskModel(null, "Arroz", "...", 3),
+        TaskModel(null, "Feijão", "...", 1),
+        TaskModel(null, "Brócolis", "...", 2),
     )
 
     Scaffold(

@@ -14,12 +14,13 @@ fun CustomButton(
     onClick: () -> Unit,
     modifier: Modifier,
     label: String,
+    buttonColor: Color,
 ) {
     Button(
-        onClick = {},
+        onClick = onClick,
         modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Blue,
+            containerColor = buttonColor,
             contentColor = Color.White
         )
     ) {

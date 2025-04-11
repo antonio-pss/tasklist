@@ -1,5 +1,6 @@
 package com.example.tasklist.view
 
+import android.widget.Toast
 import com.example.tasklist.components.MyTextField
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,20 +41,29 @@ import com.example.tasklist.ui.theme.RedRadioButtonDisabled
 import com.example.tasklist.ui.theme.RedRadioButtonSelected
 import com.example.tasklist.ui.theme.YellowRadioButtonDisabled
 import com.example.tasklist.ui.theme.YellowRadioButtonSelected
-import com.google.api.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.content.Context
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import com.example.tasklist.model.Priority
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SaveTask(navController: NavController) {
     var taskTitle by remember { mutableStateOf("") }
     var taskDescription by remember { mutableStateOf("") }
-    var noPriority by remember { mutableStateOf(false) }
+    var taskPriority by remember { mutableIntStateOf(Priority.NO_PRIORITY.value) }
+    var taskLocal by remember { mutableStateOf("") }
     var lowPriority by remember { mutableStateOf(false) }
     var mediumPriority by remember { mutableStateOf(false) }
     var highPriority by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -103,12 +113,23 @@ fun SaveTask(navController: NavController) {
                 keyboardType = KeyboardType.Text,
             )
 
+            MyTextField(
+                value = taskLocal,
+                onValueChange = { taskLocal = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp, 20.dp, 20.dp, 0.dp),
+                label = "Local",
+                maxLines = 1,
+                keyboardType = KeyboardType.Text,
+            )
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Nível de prioridade")
+                Text(text = "Nível de prioridade: ")
                 RadioButton(
                     selected = lowPriority,
                     onClick = {
@@ -152,23 +173,57 @@ fun SaveTask(navController: NavController) {
                     )
                 )
             }
-            CustomButton(
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp)
-                    .padding(10.dp),
-                label = "Salvar"
-            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+
+                CustomButton(
+                    onClick = { navController.navigate("taskList") },
+                    modifier = Modifier
+                        .height(80.dp)
+                        .width(150.dp)
+                        .padding(10.dp),
+                    label = "Cancelar",
+                    buttonColor = MaterialTheme.colorScheme.secondary
+                )
+
+                CustomButton(
+                    onClick = {
+                        onClickSaveButton(scope, context, TaskModel(null, taskTitle, taskDescription, taskPriority), navController)
+                    },
+                    modifier = Modifier
+                        .height(80.dp)
+                        .width(150.dp)
+                        .padding(10.dp),
+                    label = "Salvar",
+                    buttonColor = Color.Blue
+                )
+            }
         }
     }
 }
 
-fun onClickSaveButton(scope: CoroutineScope, context: Context, taskModel: TaskModel) {
+fun onClickSaveButton(scope: CoroutineScope, context: Context, taskModel: TaskModel, navController: NavController) {
     val taskRepository = TaskRepository()
-    val isValid = true;
+    var isValid = true;
 
     scope.launch(Dispatchers.IO) {
-        isValid = taskModel.title.isNotEmpty() && taskModel.description.isNotEmpty()
+        isValid = taskModel.title.isNotEmpty() && taskModel.description!!.isNotEmpty()
+        taskRepository.saveTask(taskModel)
+    }
+    scope.launch(Dispatchers.Main) {
+        if (isValid) {
+            Toast.makeText(context, "Salvo com sucesso!", Toast.LENGTH_SHORT).show()
+            navController.popBackStack()
+        } else {
+            if (taskModel.title.isEmpty()) {
+                Toast.makeText(context, "Título é obrigatório!", Toast.LENGTH_SHORT).show()
+            } else if (taskModel.description!!.isEmpty()) {
+                Toast.makeText(context, "Descrição é obrigatório!", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

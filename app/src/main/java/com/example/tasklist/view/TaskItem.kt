@@ -1,6 +1,7 @@
 package com.example.tasklist.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -43,7 +44,7 @@ fun TaskItem(task: TaskModel) {
             val (txtTaskTitle, txtTaskDescription, txtTaskPriority, cardTaskPriorityColor, btnDelete) = createRefs()
 
             Text(
-                text = "Estudar pra a Prova",
+                text = task.title,
                 modifier = Modifier.constrainAs(txtTaskTitle) {
                     top.linkTo(parent.top, margin = 10.dp)
                     start.linkTo(parent.start, margin = 10.dp)
@@ -51,7 +52,7 @@ fun TaskItem(task: TaskModel) {
             )
 
             Text(
-                text = "Estudar",
+                text = task.description!!,
                 modifier = Modifier.constrainAs(txtTaskDescription) {
                     top.linkTo(txtTaskTitle.bottom, margin = 10.dp)
                     start.linkTo(parent.start, margin = 10.dp)
@@ -59,7 +60,7 @@ fun TaskItem(task: TaskModel) {
             )
 
             Text(
-                text = getPriorityText(task.priority!!)["priorityText"] as String,
+                text = getPriorityText(task.priority)["priorityText"] as String,
                 modifier = Modifier.constrainAs(txtTaskPriority) {
                     top.linkTo(txtTaskDescription.bottom, margin = 10.dp)
                     start.linkTo(parent.start, margin = 10.dp)
